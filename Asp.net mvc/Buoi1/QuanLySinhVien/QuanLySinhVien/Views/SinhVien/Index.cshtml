@@ -1,0 +1,41 @@
+﻿@* Khai báo kiểu Model mà View này nhận từ Controller *@
+@model List<QuanLySinhVien.Models.SinhVien>
+
+@* Gán tiêu đề trang vào ViewData để _Layout.cshtml đọc *@
+@{ ViewData["Title"] = "Danh sách sinh viên"; }
+
+@* Tiêu đề hiển thị trên trang *@
+<h2>Danh sách sinh viên</h2>
+
+@* Bảng Bootstrap hiển thị danh sách sinh viên *@
+<table class="table table-bordered">
+
+    @* Phần đầu bảng: các cột tiêu đề *@
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Họ tên</th>
+            <th>Lớp</th>
+            <th>ĐTB</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    @* Phần thân bảng: lặp qua từng sinh viên trong Model *@
+    <tbody>
+        @foreach (var sv in Model)
+        {
+            <tr>
+                <td>@sv.Id</td>
+                <td>@sv.HoTen</td>
+                <td>@sv.Lop</td>
+                <td>@sv.DiemTrungBinh</td>
+
+                @* Link điều hướng sang action Detail với tham số id *@
+                <td>
+                    <a asp-action="Detail" asp-route-id="@sv.Id">Chi tiết</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,55 @@
+﻿@model List<QuanLySinhVien.Models.SinhVien>
+@{
+    ViewData["Title"] = "Tìm kiếm sinh viên";
+}
+
+<h2>Tìm kiếm sinh viên</h2>
+
+<form asp-action="Search" method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+        <input type="text" name="keyword" class="form-control"
+               placeholder="Nhập tên hoặc lớp..."
+               value="@ViewData["Keyword"]" />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+    </div>
+</form>
+
+@if (ViewData["Keyword"] != null)
+{
+    <p>Kết quả cho từ khóa: <strong>@ViewData["Keyword"]</strong></p>
+}
+
+@if (Model == null || Model.Count == 0)
+{
+    <p class="text-muted">Không tìm thấy sinh viên nào.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Họ tên</th>
+                <th>Lớp</th>
+                <th>ĐTB</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sv in Model)
+            {
+                <tr>
+                    <td>@sv.Id</td>
+                    <td>@sv.HoTen</td>
+                    <td>@sv.Lop</td>
+                    <td>@sv.DiemTrungBinh</td>
+                    <td>
+                        <a asp-action="Detail" asp-route-id="@sv.Id">Chi tiết</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

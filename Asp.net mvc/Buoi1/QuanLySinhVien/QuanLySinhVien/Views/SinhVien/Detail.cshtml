@@ -1,0 +1,26 @@
+﻿@* Khai báo kiểu Model mà View này nhận từ Controller *@
+@model QuanLySinhVien.Models.SinhVien
+
+@* Gán tiêu đề trang vào ViewData để _Layout.cshtml đặt vào thẻ title *@
+@{ ViewData["Title"] = "Chi tiết sinh viên"; }
+
+@* Tiêu đề hiển thị trên trang *@
+<h2>Chi tiết sinh viên</h2>
+
+@* Danh sách chứa thông tin chi tiết sinh viên *@
+<ul>
+    @* Mã số sinh viên *@
+    <li>Mã số: @Model.Id</li>
+
+    @* Họ tên sinh viên *@
+    <li>Họ tên: @Model.HoTen</li>
+
+    @* Lớp sinh viên *@
+    <li>Lớp: @Model.Lop</li>
+
+    @* Điểm trung bình *@
+    <li>Điểm trung bình: @Model.DiemTrungBinh</li>
+</ul>
+
+@* Link quay lại action Index của controller hiện tại *@
+<a asp-action="Index">Quay lại danh sách</a>
