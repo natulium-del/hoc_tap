@@ -1,0 +1,13 @@
+﻿body {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #1F3864;
+}
+
+.sv-card {
+    border: 1px solid #ccc;
+    padding: 16px;
+    border-radius: 8px;
+}

@@ -1,0 +1,75 @@
+﻿@* Khai báo kiểu Model mà View này nhận từ Controller *@
+@model List<QuanLySinhVien.Models.SinhVien>
+
+@* Gán tiêu đề trang vào ViewData để _Layout.cshtml đọc *@
+@{
+    ViewData["Title"] = "Danh sách sinh viên";
+}
+
+<form asp-action="Index" method="get" class="mb-3">
+    <input name="tuKhoa" value="@ViewData["TuKhoa"]"
+           placeholder="Tìm theo tên hoặc lớp" />
+    <button type="submit">Tìm kiếm</button>
+</form>
+
+<p>Tìm thấy <strong>@Model.Count</strong> sinh viên.</p>
+
+<h2>Danh sách sinh viên</h2>
+
+@if (TempData["ThongBao"] != null)
+{
+    <div class="alert alert-success">@TempData["ThongBao"]</div>
+}
+
+<a asp-action="Them">+ Thêm sinh viên mới</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Họ tên</th>
+            <th>Lớp</th>
+            <th>ĐTB</th>
+            <th>Cách 1 - viết cứng</th>
+            <th>Cách 2 - Tag Helper</th>
+            <th>Cách 3 - Url.Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sv in Model)
+        {
+            <tr>
+                <td>@sv.Id</td>
+                <td>@sv.HoTen</td>
+                <td>@sv.Lop</td>
+                <td>@sv.DiemTrungBinh</td>
+
+                @* Cách 1 - viết cứng URL *@
+                <td>
+                    <a href="/SinhVien/Detail/@sv.Id">Chi tiết</a>
+                </td>
+
+                @* Cách 2 - Tag Helper *@
+                <td>
+                    <a asp-action="Detail" asp-route-id="@sv.Id">Chi tiết</a>
+                </td>
+
+                @* Cách 3 - Url.Action *@
+                <td>
+                    <a href="@Url.Action("Detail", "SinhVien", new { id = sv.Id })">
+                        Chi tiết
+                    </a>
+                </td>
+                <td>
+                    <a asp-action="Detail" asp-route-id="@sv.Id">Chi tiết</a> |
+
+                    <form asp-action="Xoa" asp-route-id="@sv.Id" method="post"
+                          style="display:inline"
+                          onsubmit="return confirm('Bạn có chắc muốn xóa sinh viên @sv.HoTen?');">
+                        <button type="submit" class="btn btn-link text-danger p-0">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

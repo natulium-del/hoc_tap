@@ -1,0 +1,16 @@
+﻿@model QuanLySinhVien.Models.SinhVien
+
+<h2>@ViewData["Title"]</h2>
+
+<ul>
+    <li>Mã số: @Model.Id</li>
+    <li>Họ tên: @Model.HoTen</li>
+    <li>Lớp: @Model.Lop</li>
+    <li>Điểm trung bình: @Model.DiemTrungBinh</li>
+</ul>
+
+<p>Năm học: @ViewBag.NamHoc - Tổng số SV: @ViewBag.TongSoSV</p>
+
+<p><em>@TempData["GhiChu"]</em></p>
+
+<a asp-action="Index">Quay lại danh sách</a>

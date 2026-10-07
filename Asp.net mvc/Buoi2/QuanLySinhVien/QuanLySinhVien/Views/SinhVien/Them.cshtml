@@ -1,0 +1,14 @@
+﻿@model QuanLySinhVien.Models.SinhVien
+@{
+    ViewData["Title"] = "Thêm sinh viên";
+}
+
+<h2>Thêm sinh viên mới</h2>
+
+<form asp-action="Them" method="post">
+    <p>Họ tên: <input asp-for="HoTen" /></p>
+    <p>Lớp: <input asp-for="Lop" /></p>
+    <p>ĐTB: <input asp-for="DiemTrungBinh" /></p>
+    <button type="submit">Lưu</button>
+    <a asp-action="Index">Hủy</a>
+</form>
