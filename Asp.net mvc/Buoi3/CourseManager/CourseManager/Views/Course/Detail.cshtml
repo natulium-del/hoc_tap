@@ -1,0 +1,20 @@
+﻿@model CourseManager.Models.Course
+
+@{ ViewBag.PageTitle = "Chi tiết khóa học"; }
+
+<h2>@Model.Title</h2>
+<p>Danh mục: <span class="badge bg-info text-dark">@Model.Category</span></p>
+<p>Giá: <strong>@Model.Price.ToString("N0") đ</strong></p>
+<p>Thời lượng: <strong>@Model.Duration giờ</strong></p>
+<p>
+    Trạng thái:
+    @if (Model.IsPublished)
+    {
+        <span class="badge bg-success">Đã xuất bản</span>
+    }
+    else
+    {
+        <span class="badge bg-secondary">Bản nháp</span>
+    }
+</p>
+<a href="/khoa-hoc" class="btn btn-secondary">← Quay lại</a>

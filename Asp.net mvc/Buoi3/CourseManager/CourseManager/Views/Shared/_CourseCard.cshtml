@@ -1,0 +1,28 @@
+﻿@model CourseManager.Models.Course
+
+<div class="card mb-3 shadow-sm">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Title</h5>
+        <p>
+            <span class="badge bg-info text-dark">@Model.Category</span>
+
+            @* Dùng if/else theo IsPublished *@
+            @if (Model.IsPublished)
+            {
+                <span class="badge bg-success">Đã xuất bản</span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">Bản nháp</span>
+            }
+        </p>
+        <p>
+            Giá: <strong>@Model.Price.ToString("N0") đ</strong> |
+            Thời lượng: <strong>@Model.Duration giờ</strong>
+        </p>
+
+        @* Dùng Html.ActionLink() tạo liên kết sang trang chi tiết *@
+        @Html.ActionLink("Xem chi tiết", "Detail", "Course",
+            new { id = Model.Id }, new { @class = "btn btn-sm btn-outline-primary" })
+    </div>
+</div>

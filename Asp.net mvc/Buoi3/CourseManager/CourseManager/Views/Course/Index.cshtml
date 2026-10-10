@@ -1,0 +1,29 @@
+﻿@model IEnumerable<CourseManager.Models.Course>
+@{
+    // ViewBag đã set trong Controller
+}
+
+<h2>@ViewBag.PageTitle</h2>
+<p class="text-muted">Tổng số khóa học đang hiển thị: <strong>@ViewBag.Total</strong></p>
+
+<div class="row">
+    @foreach (var course in Model)
+    {
+        <div class="col-md-6">
+            <partial name="_CourseCard" model="course" />
+        </div>
+    }
+</div>
+@if (ViewBag.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="/khoa-hoc/trang/@i">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

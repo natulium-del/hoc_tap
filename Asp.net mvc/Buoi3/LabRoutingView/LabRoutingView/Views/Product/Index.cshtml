@@ -1,0 +1,44 @@
+﻿@model IEnumerable<LabRoutingView.Models.Product>
+@{
+    Layout = "~/Views/Shared/_ProductLayout.cshtml";
+}
+@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+    var totalPrice = Model.Sum(p => p.Price);        // Tổng giá trị tất cả
+    var inStockCount = Model.Count(p => p.InStock);  // Số sản phẩm còn hàng
+    var totalCount = Model.Count();                  // Tổng số sản phẩm
+}
+@using (Html.BeginForm("Search", "Product", FormMethod.Post))
+{
+    <div class="input-group mb-3">
+        <input type="text" name="keyword" class="form-control"
+               placeholder="Nhập tên sản phẩm..." />
+        <button type="submit" class="btn btn-success">Tìm kiếm</button>
+    </div>
+}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Tên</th>
+            <th>Giá</th>
+            <th>Phân loại</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <partial name="_ProductRow" model="item" />
+        }
+    </tbody>
+    <tfoot class="table-light fw-bold">
+        <tr>
+            <td colspan="2">Tổng cộng</td>
+            <td>@totalPrice.ToString("N0") đ</td>
+            <td colspan="2">Còn hàng: @inStockCount / @totalCount</td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>

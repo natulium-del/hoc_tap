@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CourseManager</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CourseManager.styles.css" asp-append-version="true" />
+</head>
+<body>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">CourseManager</a>
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="nav-item"><a class="nav-link" href="/khoa-hoc">Khóa học</a></li>
+                <li class="nav-item"><a class="nav-link" href="/khoa-hoc/backend">Backend</a></li>
+                <li class="nav-item"><a class="nav-link" href="/khoa-hoc/frontend">Frontend</a></li>
+                <li class="nav-item"><a class="nav-link" href="/khoa-hoc/mobile">Mobile</a></li>
+                <li class="nav-item"><a class="nav-link" href="/dang-ky">Đăng ký</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@TempData["Success"]</div>
+        }
+        @RenderBody()
+    </div>
+
+    <footer class="border-top footer text-muted">
+        &copy; @DateTime.Now.Year CourseManager
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

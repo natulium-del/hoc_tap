@@ -1,0 +1,23 @@
+﻿@model LabRoutingView.Models.Product
+
+<tr>
+    <td>@Model.Id</td>
+    <td>@Model.Name</td>
+    <td>@Model.Price.ToString("N0") đ</td>
+    <td>@Model.Category</td>
+    <td>
+        @if (Model.InStock)
+        {
+            <span class="text-success">Còn hàng</span>
+        }
+        else
+        {
+            <span class="text-danger">Hết hàng</span>
+        }
+    </td>
+    <td>
+        @Html.ActionLink("Chi tiết", "Details", "Product",
+                         new { id = Model.Id },
+                         new { @class = "btn btn-sm btn-primary" })
+    </td>
+</tr>
