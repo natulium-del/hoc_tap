@@ -1,0 +1,67 @@
+﻿@model SinhVien
+@{ 
+    ViewData["Title"] = "Chi tiết sinh viên"; 
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["ThongBao"] is string thongBao)
+{
+    <div class="alert alert-success">✔ @thongBao</div>
+}
+
+<dl class="row border rounded p-3">
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.HoTen)</dt>
+    <dd class="col-sm-9">@Model.HoTen</dd>
+    
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Lop)</dt>
+    <dd class="col-sm-9">@Model.Lop</dd>
+    
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.NgaySinh)</dt>
+    <dd class="col-sm-9">@Model.NgaySinh.ToString("dd/MM/yyyy")</dd>
+    
+    <dt class="col-sm-3">Email</dt>
+    <dd class="col-sm-9">@(Model.Email ?? "—")</dd>
+    
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.SoDienThoai)</dt>
+    <dd class="col-sm-9">@(Model.SoDienThoai ?? "—")</dd>
+    
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.DiemTrungBinh)</dt>
+    <dd class="col-sm-9">@Model.DiemTrungBinh.ToString("0.00")</dd>
+    
+    <dt class="col-sm-3">Khoa</dt>
+    <dd class="col-sm-9">@(Model.Khoa?.TenKhoa) (@(Model.Khoa?.MaKhoa))</dd>
+</dl>
+
+<h4>Các môn đã đăng ký</h4>
+@if (Model.DangKyHocs.Count == 0)
+{
+    <p class="text-muted">Sinh viên chưa đăng ký môn nào.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Môn học</th>
+                <th>Số tín chỉ</th>
+                <th>Ngày đăng ký</th>
+                <th>Điểm</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var dk in Model.DangKyHocs.OrderBy(d => d.MonHoc.TenMon))
+            {
+                <tr>
+                    <td>@dk.MonHoc.TenMon</td>
+                    <td>@dk.MonHoc.SoTinChi</td>
+                    <td>@dk.NgayDangKy.ToString("dd/MM/yyyy")</td>
+                    <td>@(dk.Diem.HasValue ? dk.Diem.Value.ToString("0.00") : "Chưa có")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">✎ Sửa</a>
+<a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>

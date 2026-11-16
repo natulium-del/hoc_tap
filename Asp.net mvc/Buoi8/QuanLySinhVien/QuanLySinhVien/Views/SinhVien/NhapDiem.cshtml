@@ -1,0 +1,37 @@
+﻿@model QuanLySinhVien.ViewModels.NhapDiemVm
+
+<h2>Nhập điểm lớp @Model.Lop</h2>
+
+<form asp-action="NhapDiem" method="post">
+    <input type="hidden" asp-for="Lop" />
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Họ tên</th>
+                <th style="width:180px">Điểm</th>
+            </tr>
+        </thead>
+        <tbody>
+            @* BẮT BUỘC dùng for để sinh đúng chỉ số - KHÔNG dùng foreach *@
+            @for (int i = 0; i < Model.DanhSach.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Model.DanhSach[i].HoTen
+                        <input type="hidden" asp-for="DanhSach[i].SinhVienId" />
+                        <input type="hidden" asp-for="DanhSach[i].HoTen" />
+                    </td>
+                    <td>
+                        <input asp-for="DanhSach[i].Diem" class="form-control" />
+                        <span asp-validation-for="DanhSach[i].Diem" class="text-danger"></span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary">Lưu tất cả</button>
+</form>

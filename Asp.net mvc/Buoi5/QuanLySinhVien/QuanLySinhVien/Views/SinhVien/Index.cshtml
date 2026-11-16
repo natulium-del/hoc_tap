@@ -1,0 +1,94 @@
+﻿@model PageResult<SinhVienDto>
+
+@{
+    ViewData["Title"] = "Danh sách sinh viên";
+    var tuKhoa = ViewBag.TuKhoa as string;
+    var sapXep = ViewBag.SapXep as string ?? "";
+    var dsSapXep = new SelectList(new[]
+    {
+        new { Ma = "", Ten = "Tên A-Z" },
+        new { Ma = "ten_desc", Ten = "Tên Z-A" },
+        new { Ma = "diem_desc", Ten = "Điểm cao nhất" },
+        new { Ma = "diem_asc", Ten = "Điểm thấp nhất" }
+    }, "Ma", "Ten", sapXep);
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["ThongBao"] is string thongBao)
+{
+    <div class="alert alert-success">✔ @thongBao</div>
+}
+
+<div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+    <a asp-action="Create" class="btn btn-primary">+ Thêm sinh viên</a>
+    
+    @* Form tìm kiếm dùng GET để URL giữ được điều kiện lọc *@
+    <form asp-action="Index" method="get" class="d-flex gap-2 ms-auto">
+        <input name="tuKhoa" value="@tuKhoa" class="form-control" placeholder="Tìm theo tên hoặc lớp" />
+        <select name="sapXep" asp-items="dsSapXep" class="form-select"></select>
+        <button type="submit" class="btn btn-primary">Tìm</button>
+    </form>
+</div>
+
+<p class="mb-1">
+    Tìm thấy <strong>@Model.TongSo</strong> sinh viên – trang @Model.Trang / @Model.TongSoTrang
+</p>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Họ tên</th>
+            <th>Lớp</th>
+            <th>Khoa</th>
+            <th>ĐTB</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sv in Model.Items)
+        {
+            <tr>
+                <td>@sv.HoTen</td>
+                <td>@sv.Lop</td>
+                <td>@sv.TenKhoa</td>
+                <td>@sv.DiemTrungBinh.ToString("0.00")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@sv.Id">Chi tiết</a> |
+                    <a asp-action="Edit" asp-route-id="@sv.Id">Sửa</a> |
+                    <a asp-action="Delete" asp-route-id="@sv.Id" class="text-danger">Xóa</a>
+                </td>
+            </tr>
+        }
+        @if (Model.Items.Count == 0)
+        {
+            <tr>
+                <td colspan="5" class="text-center text-muted">Không có dữ liệu phù hợp</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.TongSoTrang > 1)
+{
+    <nav>
+        <ul class="pagination">
+            @for (int i = 1; i <= Model.TongSoTrang; i++)
+            {
+                <li class="page-item @(i == Model.Trang ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-trang="@i"
+                       asp-route-tuKhoa="@tuKhoa" asp-route-sapXep="@sapXep">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
+<form asp-action="CongDiem" method="post" 
+      class="d-flex flex-wrap gap-2 align-items-center border rounded p-2 mt-3">
+    <span>Cộng điểm cho lớp</span>
+    <input name="lop" class="form-control" style="width:130px" placeholder="CNTT-K18" required />
+    <span>mức</span>
+    <input name="mucCong" type="number" step="0.1" min="0.1" max="2" value="0.5" 
+           class="form-control" style="width:90px" />
+    <button type="submit" class="btn btn-warning">Cập nhật hàng loạt</button>
+</form>

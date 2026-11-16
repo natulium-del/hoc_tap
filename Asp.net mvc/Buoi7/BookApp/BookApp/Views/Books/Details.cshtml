@@ -1,0 +1,92 @@
+﻿@model Book
+
+<h2>@Model.Title</h2>
+
+@if (TempData["Msg"] is string msg) 
+{ 
+    <div class="alert alert-success">@msg</div> 
+}
+
+<table class="table">
+    <tr>
+        <th style="width:180px">Xuất bản</th>
+        <td>@Model.PublishedOn.ToString("dd/MM/yyyy")</td>
+    </tr>
+    <tr>
+        <th>Giá gốc</th>
+        <td>@Model.Price.ToString("N0") đ</td>
+    </tr>
+    <tr>
+        <th>Khuyến mãi</th>
+        <td>
+            @if (Model.Promotion is null) 
+            { 
+                <span>Không có</span> 
+            }
+            else 
+            { 
+                <b>@Model.Promotion.NewPrice.ToString("N0") đ</b> 
+                <span>– @Model.Promotion.PromotionalText</span> 
+            }
+            <form asp-action="UpdatePromotion" method="post" class="d-inline">
+                <input type="hidden" name="bookId" value="@Model.Id" />
+                <input name="newPrice" type="number" step="1000" class="form-control d-inline"
+                       style="width:130px" />
+                <input name="promotionalText" class="form-control d-inline" style="width:160px" />
+                <button class="btn btn-warning btn-sm">Lưu khuyến mãi</button>
+            </form>
+        </td>
+    </tr>
+    <tr>
+        <th>Tác giả</th>
+        <td>
+            @string.Join(", ", Model.BookAuthors.Select(ba => ba.Author.Name))
+            <form asp-action="ChangeAuthors" method="post" class="d-inline">
+                <input type="hidden" name="bookId" value="@Model.Id" />
+                <select name="authorIds" multiple class="form-select d-inline" style="width:220px">
+                    @foreach (var a in (List<Author>)ViewBag.AllAuthors)
+                    {
+                        <option value="@a.Id">@a.Name</option>
+                    }
+                </select>
+                <button class="btn btn-secondary btn-sm">Đổi tác giả</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<h4>Đánh giá (@Model.Reviews.Count)</h4>
+
+<table class="table table-sm">
+    @foreach (var r in Model.Reviews)
+    {
+        <tr>
+            <td>@r.VoterName</td>
+            <td>@r.NumStars ★</td>
+            <td>@r.Comment</td>
+            <td>
+                <form asp-action="DeleteReview" method="post">
+                    <input type="hidden" name="reviewId" value="@r.Id" />
+                    <input type="hidden" name="bookId" value="@Model.Id" />
+                    <button class="btn btn-link p-0 text-danger">Xóa</button>
+                </form>
+            </td>
+        </tr>
+    }
+</table>
+
+<form asp-action="AddReview" method="post" class="row g-2">
+    <input type="hidden" name="bookId" value="@Model.Id" />
+    <div class="col-auto">
+        <input name="voterName" class="form-control" placeholder="Tên của bạn" required />
+    </div>
+    <div class="col-auto">
+        <input name="numStars" type="number" min="1" max="5" value="5" class="form-control" />
+    </div>
+    <div class="col">
+        <input name="comment" class="form-control" placeholder="Nhận xét…" />
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary">Gửi</button>
+    </div>
+</form>

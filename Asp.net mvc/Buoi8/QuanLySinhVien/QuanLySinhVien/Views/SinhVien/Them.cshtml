@@ -1,0 +1,105 @@
+﻿@model QuanLySinhVien.ViewModels.SinhVienCreateVm
+@{
+    ViewData["Title"] = "Thêm sinh viên";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Them" method="post" enctype="multipart/form-data">
+    @* Chỉ hiển thị lỗi CHUNG của form - tránh lặp lỗi hai lần *@
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+    <div class="row g-3">
+        <!-- Cột 1 -->
+        <div class="col-md-6">
+            <label asp-for="MaSV" class="form-label"></label>
+            <input asp-for="MaSV" class="form-control" />
+            <span asp-validation-for="MaSV" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="HoTen" class="form-label"></label>
+            <input asp-for="HoTen" class="form-control" />
+            <span asp-validation-for="HoTen" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="Lop" class="form-label"></label>
+            <input asp-for="Lop" class="form-control" />
+            <span asp-validation-for="Lop" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="NgaySinh" class="form-label"></label>
+            <input asp-for="NgaySinh" type="date" class="form-control" />
+            <span asp-validation-for="NgaySinh" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="SoDienThoai" class="form-label"></label>
+            <input asp-for="SoDienThoai" class="form-control" />
+            <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="DiemTrungBinh" class="form-label"></label>
+            <input asp-for="DiemTrungBinh" class="form-control" />
+            <span asp-validation-for="DiemTrungBinh" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="GioiTinh" class="form-label"></label>
+            <select asp-for="GioiTinh" class="form-select">
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+                <option value="Khác">Khác</option>
+            </select>
+            <span asp-validation-for="GioiTinh" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="KhoaId" class="form-label"></label>
+            <select asp-for="KhoaId" asp-items="Model.DanhSachKhoa" class="form-select">
+                <option value="">-- Chọn khoa --</option>
+            </select>
+            <span asp-validation-for="KhoaId" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="AnhDaiDien" class="form-label"></label>
+            <input asp-for="AnhDaiDien" type="file" accept=".jpg,.jpeg,.png" class="form-control" />
+            <span asp-validation-for="AnhDaiDien" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Phần Địa chỉ (Lồng nhau) -->
+    <fieldset class="border p-3 mt-4 mb-3">
+        <legend class="fs-6">Địa chỉ thường trú</legend>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="DiaChi.SoNha" class="form-label"></label>
+                <input asp-for="DiaChi.SoNha" class="form-control" />
+                <span asp-validation-for="DiaChi.SoNha" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="DiaChi.TinhThanh" class="form-label"></label>
+                <input asp-for="DiaChi.TinhThanh" class="form-control" />
+                <span asp-validation-for="DiaChi.TinhThanh" class="text-danger"></span>
+            </div>
+        </div>
+    </fieldset>
+
+    <button type="submit" class="btn btn-primary mt-3">Lưu</button>
+    <a asp-action="Index" class="btn btn-secondary mt-3">Hủy</a>
+</form>
+
+@* BẮT BUỘC - không có dòng này thì validation phía client KHÔNG chạy *@
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

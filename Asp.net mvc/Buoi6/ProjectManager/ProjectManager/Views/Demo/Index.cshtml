@@ -1,0 +1,88 @@
+﻿@model DemoViewModel
+@{
+    ViewData["Title"] = "Demo quan hệ";
+}
+
+<h2>Demo các quan hệ – EF Core 10</h2>
+
+@if (TempData["Ok"] is string ok)
+{
+    <div class="alert alert-success">@ok</div>
+}
+@if (TempData["Error"] is string err)
+{
+    <div class="alert alert-danger">@err</div>
+}
+
+<div class="row g-3">
+
+    <div class="col-md-6">
+        <h5 class="text-primary">① 1 – N: Khách hàng và số dự án</h5>
+        <table class="table table-sm table-striped">
+            <tr><th>Khách hàng</th><th>Số dự án</th><th>Tổng ngân sách</th></tr>
+            @foreach (var c in Model.Customers)
+            {
+                <tr>
+                    <td>@c.Name</td>
+                    <td>@c.ProjectCount</td>
+                    <td>@c.TotalBudget.ToString("N0")</td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div class="col-md-6">
+        <h5 class="text-danger">② Kế thừa TPH: nhân sự theo loại</h5>
+        <table class="table table-sm table-striped">
+            <tr><th>Họ tên</th><th>Loại</th><th>Chuyên môn</th></tr>
+            @foreach (var r in Model.Resources)
+            {
+                <tr>
+                    <td>@r.FullName</td>
+                    <td>@r.Type</td>
+                    <td>@r.Skill</td>
+                </tr>
+            }
+        </table>
+        <small>Chỉ Developer: @string.Join(", ", Model.Developers)</small>
+    </div>
+
+    <div class="col-md-6">
+        <h5 class="text-success">③ 1 – 1: hồ sơ nhân sự (LeftJoin)</h5>
+        <table class="table table-sm table-striped">
+            <tr><th>Họ tên</th><th>Điện thoại</th></tr>
+            @foreach (var p in Model.Profiles)
+            {
+                <tr>
+                    <td>@p.FullName</td>
+                    <td>@(p.Phone ?? "(chưa có hồ sơ)")</td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div class="col-md-6">
+        <h5 style="color:#6a1b9a">④ N – N: dự án, thẻ và thành viên</h5>
+        <table class="table table-sm table-striped">
+            <tr><th>Dự án</th><th>Thẻ</th><th>Thành viên (vai trò)</th></tr>
+            @foreach (var p in Model.Projects)
+            {
+                <tr>
+                    <td>@p.Name</td>
+                    <td>@p.Tags</td>
+                    <td>@p.Members</td>
+                </tr>
+            }
+        </table>
+    </div>
+
+</div>
+
+<div class="d-flex gap-2">
+    <form asp-action="DeleteCustomer" asp-route-id="1" method="post">
+        <button class="btn btn-danger">Thử xóa khách hàng FPT Software</button>
+    </form>
+    <form asp-action="DeleteResource" asp-route-id="4" method="post">
+        <button class="btn btn-warning">Thử xóa nhân sự Phạm Thu Dung</button>
+    </form>
+</div>

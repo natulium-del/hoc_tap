@@ -1,0 +1,87 @@
+﻿@model QuanLySinhVien.Models.PagedResult<QuanLySinhVien.Models.SinhVienDto>
+@{
+    ViewData["Title"] = "Danh sách sinh viên";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["ThongBao"] != null)
+{
+    <div class="alert alert-success">@TempData["ThongBao"]</div>
+}
+
+<p><a class="btn btn-primary" asp-action="Them">+ Thêm sinh viên</a></p>
+
+@* ===== FORM TÌM KIẾM + SẮP XẾP ===== *@
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+        <input name="tuKhoa" value="@ViewBag.TuKhoa" class="form-control"
+               placeholder="Tìm theo tên hoặc lớp" />
+    </div>
+    <div class="col-auto">
+        <select name="sapXep" class="form-select">
+            <option value="">Tên A-Z</option>
+            <option value="ten_desc">Tên Z-A</option>
+            <option value="diem_desc">Điểm cao nhất</option>
+            <option value="diem_asc">Điểm thấp nhất</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary">Tìm</button>
+    </div>
+</form>
+
+@* ===== THÔNG TIN PHÂN TRANG ===== *@
+<p>
+    Tìm thấy <strong>@Model.TongSo</strong> sinh viên -
+    trang @Model.Trang / @Model.TongSoTrang
+</p>
+
+@* ===== BẢNG DANH SÁCH ===== *@
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Họ tên</th>
+            <th>Lớp</th>
+            <th>Khoa</th>
+            <th>ĐTB</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sv in Model.Items)   @* ← đổi Model → Model.Items *@
+        {
+            <tr>
+                <td>@sv.HoTen</td>
+                <td>@sv.Lop</td>
+                <td>@sv.TenKhoa</td>
+                <td>@sv.DiemTrungBinh.ToString("0.00")</td>
+                <td>
+                    <a asp-action="Detail" asp-route-id="@sv.Id">Chi tiết</a> |
+                    <a asp-action="Sua" asp-route-id="@sv.Id">Sửa</a> |
+                    <form asp-action="Xoa" asp-route-id="@sv.Id" method="post"
+                          style="display:inline"
+                          onsubmit="return confirm('Xác nhận xóa?');">
+                        <button type="submit" class="btn btn-link p-0">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@* ===== PHÂN TRANG ===== *@
+<nav>
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.TongSoTrang; i++)
+        {
+            <li class="page-item @(i == Model.Trang ? "active" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-trang="@i"
+                   asp-route-tuKhoa="@ViewBag.TuKhoa"
+                   asp-route-sapXep="@ViewBag.SapXep">@i</a>
+            </li>
+        }
+    </ul>
+</nav>

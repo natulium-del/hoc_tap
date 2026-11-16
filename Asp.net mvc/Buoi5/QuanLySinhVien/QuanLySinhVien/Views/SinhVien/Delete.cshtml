@@ -1,0 +1,27 @@
+﻿@model SinhVien
+@{ 
+    ViewData["Title"] = "Xóa sinh viên"; 
+}
+
+<h2 class="text-danger">@ViewData["Title"]</h2>
+
+<div class="alert alert-warning">⚠ Bạn có chắc chắn muốn xóa sinh viên này?</div>
+
+<dl class="row border rounded p-3">
+    <dt class="col-sm-3">Họ và tên</dt> 
+    <dd class="col-sm-9">@Model.HoTen</dd>
+    
+    <dt class="col-sm-3">Lớp</dt> 
+    <dd class="col-sm-9">@Model.Lop</dd>
+    
+    <dt class="col-sm-3">Khoa</dt> 
+    <dd class="col-sm-9">@(Model.Khoa?.TenKhoa)</dd>
+    
+    <dt class="col-sm-3">Điểm TB</dt> 
+    <dd class="col-sm-9">@Model.DiemTrungBinh.ToString("0.00")</dd>
+</dl>
+
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <button type="submit" class="btn btn-danger">🗑️ Xác nhận xóa</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>

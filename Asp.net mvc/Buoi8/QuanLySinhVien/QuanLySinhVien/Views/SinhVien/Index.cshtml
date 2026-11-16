@@ -1,0 +1,99 @@
+@* Khai báo kiểu Model là PagedResult chứa danh sách SinhVienDto *@
+@model QuanLySinhVien.Models.PagedResult<QuanLySinhVien.Models.SinhVienDto>
+
+@* Gán tiêu đề trang vào ViewData để _Layout.cshtml đọc *@
+@{ ViewData["Title"] = "Danh sách sinh viên"; }
+
+@* Tiêu đề hiển thị trên trang *@
+<h2>Danh sách sinh viên</h2>
+
+@* Nút thêm sinh viên và thêm không an toàn *@
+<div class="mb-3">
+    <a asp-action="Them" class="btn btn-primary">Thêm sinh viên</a>
+    <a asp-action="ThemKhongAnToan" class="btn btn-warning">Thêm (Không An Toàn)</a>
+</div>
+
+@* Bảng Bootstrap hiển thị danh sách sinh viên *@
+<table class="table table-bordered">
+
+    @* Phần đầu bảng: các cột tiêu đề *@
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Họ tên</th>
+            <th>Lớp</th>
+            <th>Khoa</th>
+            <th>ĐTB</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    @* Phần thân bảng: lặp qua từng sinh viên trong Model.Items *@
+    <tbody>
+        @foreach (var sv in Model.Items)
+        {
+            <tr>
+                <td>@sv.Id</td>
+                <td>@sv.HoTen</td>
+                <td>@sv.Lop</td>
+                <td>@sv.TenKhoa</td>
+                <td>@sv.DiemTrungBinh</td>
+
+                @* Link điều hướng sang action Detail với tham số id *@
+                <td>
+                    <a asp-action="Detail" asp-route-id="@sv.Id">Chi tiết</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@* Phân trang *@
+<nav>
+    <ul class="pagination">
+        @* Nút Previous *@
+        @if (Model.Trang > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@(Model.Trang - 1)">Trước</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">Trước</span>
+            </li>
+        }
+
+        @* Các nút trang *@
+        @for (int i = 1; i <= Model.TongSoTrang; i++)
+        {
+            if (i == Model.Trang)
+            {
+                <li class="page-item active">
+                    <span class="page-link">@i</span>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                </li>
+            }
+        }
+
+        @* Nút Next *@
+        @if (Model.Trang < Model.TongSoTrang)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@(Model.Trang + 1)">Tiếp</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">Tiếp</span>
+            </li>
+        }
+    </ul>
+</nav>

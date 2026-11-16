@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Lỗi";
+    int code = (int)(ViewData["StatusCode"] ?? 500);
+}
+
+<div class="text-center">
+    <h1 class="display-3 text-danger">@code</h1>
+
+    @if (code == 404)
+    {
+        <h2>Không tìm thấy trang</h2>
+        <p>Trang bạn tìm không tồn tại hoặc đã bị di chuyển.</p>
+    }
+    else if (code == 500)
+    {
+        <h2>Lỗi hệ thống</h2>
+        <p>Đã xảy ra lỗi. Vui lòng thử lại sau.</p>
+    }
+    else
+    {
+        <h2>Đã xảy ra lỗi</h2>
+        <p>Mã lỗi: @code</p>
+    }
+
+    <p>
+        <strong>Request ID:</strong>
+        <code>@ViewData["RequestId"]</code>
+    </p>
+
+    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
+        Về trang chủ
+    </a>
+</div>

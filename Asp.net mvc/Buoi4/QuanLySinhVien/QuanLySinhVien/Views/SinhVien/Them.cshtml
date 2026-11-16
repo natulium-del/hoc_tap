@@ -1,0 +1,49 @@
+﻿@model QuanLySinhVien.Models.SinhVien
+@{ ViewData["Title"] = "Thêm sinh viên"; }
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Them" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-2">
+        <label asp-for="HoTen"></label>
+        <input asp-for="HoTen" class="form-control" />
+        <span asp-validation-for="HoTen" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Lop"></label>
+        <input asp-for="Lop" class="form-control" />
+        <span asp-validation-for="Lop" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="NgaySinh"></label>
+        <input asp-for="NgaySinh" type="date" class="form-control" />
+        <span asp-validation-for="NgaySinh" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="DiemTrungBinh"></label>
+        <input asp-for="DiemTrungBinh" class="form-control" />
+        <span asp-validation-for="DiemTrungBinh" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Khoa</label>
+        <select asp-for="KhoaId" asp-items="ViewBag.KhoaList" class="form-select">
+            <option value="">-- Chọn khoa --</option>
+        </select>
+        <span asp-validation-for="KhoaId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Lưu</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>

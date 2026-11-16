@@ -1,0 +1,34 @@
+﻿@* ===== Khối code Razor: thiết lập dữ liệu cho layout ===== *@
+@{
+    // Gán tiêu đề trang vào ViewData để _Layout.cshtml đọc và đặt vào thẻ <title>
+    ViewData["Title"] = "Trang chủ";
+}
+
+@* ===== Phần nội dung chính của trang ===== *@
+<!-- div bao ngoài, class "text-center" của Bootstrap giúp căn giữa toàn bộ nội dung -->
+<div class="text-center">
+    <img src="~/images/avatar.jpg" alt="Ảnh sinh viên"
+     style="width:160px; height:160px;
+     border-radius:50%; object-fit:cover;" />
+    <!-- Tiêu đề chính của trang, class "display-5" tạo cỡ chữ lớn kiểu trang trọng -->
+    <h1 class="display-5">Bài thực hành số 1 - ASP.NET Core MVC</h1>
+
+    <!-- Đường kẻ ngang phân cách tiêu đề với phần nội dung bên dưới -->
+    <hr />
+
+    <!-- Đoạn văn hiển thị họ tên: nhãn in đậm, giá trị lấy từ ViewData do Controller truyền sang -->
+    <p><strong>Họ và tên:</strong> @ViewData["HoTen"]</p>
+
+    <!-- Đoạn văn hiển thị mã số sinh viên, giá trị lấy từ ViewData["MSSV"] -->
+    <p><strong>Mã số sinh viên:</strong> @ViewData["MSSV"]</p>
+
+    <!-- Đoạn văn hiển thị lớp, giá trị lấy từ ViewData["Lop"] -->
+    <p><strong>Lớp:</strong> @ViewData["Lop"]</p>
+
+    <!-- Đoạn văn in nghiêng ghi chú thời điểm trang được tạo, lấy từ ViewData["ThoiGian"] -->
+    <p><em>Trang được tạo lúc: @ViewData["ThoiGian"]</em></p>
+
+    <p>Lớp: @ViewData["TenLop"] - Giảng viên: @ViewData["GiangVien"]</p>
+    <p>Sĩ số: @ViewData["SoSinhVien"] sinh viên</p>
+
+</div>

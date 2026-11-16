@@ -1,0 +1,94 @@
+using QuanLySinhVien.Middlewares;
+using System.Diagnostics;
+using QuanLySinhVien.Services;
+using Microsoft.EntityFrameworkCore;
+using QuanLySinhVien.Data;
+
+var builder = WebApplication.CreateBuilder(args); // Tạo builder
+
+// Add services to the container.
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); //Đăng kí dịch vụ DbContext
+builder.Services.AddControllersWithViews(); //Đăng kí dịch vụ MVC
+
+builder.Services.AddControllersWithViews(); //Đăng kí dịch vụ
+
+builder.Services.AddSingleton<SinhVienService>();
+
+builder.Services.AddScoped<ISinhVienService, SinhVienService>();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+    if (builder.Environment.IsDevelopment())
+    {
+        options.LogTo(Console.WriteLine, LogLevel.Information)
+               .EnableSensitiveDataLogging()   // hiện giá trị tham số thật
+               .EnableDetailedErrors();
+    }
+});
+var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    DbInitializer.Seed(db);
+}
+//app.Use(async (context, next) =>
+//{
+//    var sw = Stopwatch.StartNew();
+//    Console.WriteLine($"--> VÀO : {context.Request.Method} " +
+//                      $"{context.Request.Path}");
+//    await next(); // chuyển tiếp cho middleware kế tiếp
+//    sw.Stop();
+//    Console.WriteLine($"<-- RA : {context.Response.StatusCode} " +
+//                      $"({sw.ElapsedMilliseconds} ms)");
+//});
+
+app.UseRequestTiming();
+app.UseBlockBot();
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())  // Dùng pipeline
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
+}
+
+app.UseRequestCounter();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.Map("/bao-tri", branch => branch.Run(async context =>
+{
+    context.Response.StatusCode = 503;
+    context.Response.ContentType = "text/html; charset=utf-8";
+    await context.Response.WriteAsync(
+        "<h2>Hệ thống đang bảo trì. Vui lòng quay lại sau.</h2>");
+}));
+app.MapStaticAssets();
+
+// Endpoint /thong-ke — trả về số request
+app.MapGet("/thong-ke", async context =>
+{
+    context.Response.ContentType = "text/html; charset=utf-8";
+    await context.Response.WriteAsync(
+        $"<h2>Tổng số request đã phục vụ: {RequestCounterMiddleware.RequestCount}</h2>");
+});
+
+app.MapControllerRoute(
+    name: "sinhVienChiTiet",
+    pattern: "sv/{id:int:min(1)}",
+    defaults: new { controller = "SinhVien", action = "Detail" });
+
+
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}")
+    .WithStaticAssets();
+
+
+app.Run(); //Chạy ứng dụng

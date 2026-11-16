@@ -1,0 +1,49 @@
+﻿@model SinhVien
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <label asp-for="HoTen" class="form-label fw-bold"></label>
+        <input asp-for="HoTen" class="form-control" />
+        <span asp-validation-for="HoTen" class="text-danger"></span>
+    </div>
+    
+    <div class="col-md-6">
+        <label asp-for="Lop" class="form-label fw-bold"></label>
+        <input asp-for="Lop" class="form-control" />
+        <span asp-validation-for="Lop" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="NgaySinh" class="form-label fw-bold"></label>
+        <input asp-for="NgaySinh" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control" />
+        <span asp-validation-for="NgaySinh" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Email" class="form-label fw-bold"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="SoDienThoai" class="form-label fw-bold"></label>
+        <input asp-for="SoDienThoai" class="form-control" />
+        <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="DiemTrungBinh" class="form-label fw-bold"></label>
+        <input asp-for="DiemTrungBinh" class="form-control" />
+        <span asp-validation-for="DiemTrungBinh" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="KhoaId" class="form-label fw-bold"></label>
+        <select asp-for="KhoaId" asp-items="ViewBag.KhoaList" class="form-select">
+            <option value="">-- Chọn khoa --</option>
+        </select>
+        <span asp-validation-for="KhoaId" class="text-danger"></span>
+    </div>
+</div>

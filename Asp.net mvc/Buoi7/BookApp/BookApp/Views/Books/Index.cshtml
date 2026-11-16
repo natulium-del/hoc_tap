@@ -1,0 +1,95 @@
+﻿@using BookApp.Extensions
+@using BookApp.Services
+@model List<BookListDto>
+@{
+    ViewData["Title"] = "Danh sách sách";
+    var opt = (BookFilterOptions)ViewBag.Options;
+}
+
+<h2>Danh sách sách</h2>
+
+@if (TempData["Msg"] is string msg)
+{
+    <div class="alert alert-success">@msg</div>
+}
+
+<form asp-action="Index" method="get" class="row g-2 align-items-center mb-3">
+    <div class="col-auto">
+        <select name="FilterBy" class="form-select"
+                asp-items="Html.GetEnumSelectList<BooksFilterBy>()"></select>
+    </div>
+    <div class="col-auto">
+        <input name="FilterValue" value="@opt.FilterValue" class="form-control" placeholder="Giá trị lọc" />
+    </div>
+    <div class="col-auto">
+        <select name="OrderBy" class="form-select"
+                asp-items="Html.GetEnumSelectList<OrderByOptions>()"></select>
+    </div>
+    <div class="col-auto">
+        <input name="PageSize" value="@opt.PageSize" type="number" min="1" max="50" class="form-control"
+               style="width:90px" />
+    </div>
+    <div class="col-auto"><button class="btn btn-primary">Áp dụng</button></div>
+    <div class="col-auto ms-auto">Tìm thấy <b>@opt.TotalRows</b> sách – trang @opt.PageNum / @opt.TotalPages</div>
+</form>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Tiêu đề</th>
+            <th>Xuất bản</th>
+            <th class="text-end">Giá (đ)</th>
+            <th>Khuyến mãi</th>
+            <th>Tác giả</th>
+            <th class="text-center">Đánh giá</th>
+            <th class="text-center">Điểm TB</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var b in Model)
+        {
+            <tr>
+                <td>@b.Title</td>
+                <td>@b.PublishedOn.ToString("dd/MM/yyyy")</td>
+                <td class="text-end">@b.Price.ToString("N0")</td>
+                <td>
+                    @if (b.PromotionPrice is null)
+                    {
+                        <span>—</span>
+                    }
+                    else
+                    {
+                        <b>@b.PromotionPrice.Value.ToString("N0")</b>
+                        <span class="text-danger">@b.PromotionText</span>
+                    }
+                </td>
+                <!-- Sửa lỗi: Đổi b.Authors thành b.AuthorNames và join lại thành chuỗi -->
+                <td>@string.Join(", ", b.AuthorNames)</td>
+                <!-- Sửa lỗi: Đổi b.ReviewsCount thành b.ReviewCount -->
+                <td class="text-center">@b.ReviewCount</td>
+                <!-- Sửa lỗi: Đổi b.ReviewsAverage thành b.AverageRating -->
+                <td class="text-center">@(b.AverageRating?.ToString("0.0") ?? "-")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@b.Id">Chi tiết</a> |
+                    <form asp-action="SoftDelete" asp-route-id="@b.Id" method="post" class="d-inline">
+                        <button class="btn btn-link p-0 text-danger">Xóa mềm</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<nav>
+    <ul class="pagination">
+        @for (int i = 1; i <= opt.TotalPages; i++)
+        {
+            <li class="page-item @(i == opt.PageNum ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-PageNum="@i"
+                   asp-route-FilterBy="@opt.FilterBy" asp-route-FilterValue="@opt.FilterValue"
+                   asp-route-OrderBy="@opt.OrderBy" asp-route-PageSize="@opt.PageSize">@i</a>
+            </li>
+        }
+    </ul>
+</nav>
